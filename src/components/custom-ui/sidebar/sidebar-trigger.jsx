@@ -1,5 +1,5 @@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "../../ui/sidebar";
-import { ChevronsLeft, PanelsTopLeft } from "lucide-react";
+import { ChevronsLeft, FileSearch, PanelsTopLeft } from "lucide-react";
 import { useRef } from "react";
 
 export function CustomSidebarTrigger() {
@@ -7,6 +7,14 @@ export function CustomSidebarTrigger() {
 
     return (
         <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton size={'lg'} className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground my-5">
+                    <div className="flex items-center justify-center gap-2">
+                        <FileSearch />
+                        <span className="text-lg text-center">FinDocs AI</span>
+                    </div>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem onClick={() => triggerRef.current?.click()}>
                 <SidebarMenuButton size={'lg'} className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                     <aside className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
