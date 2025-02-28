@@ -8,6 +8,7 @@ const UploadDocuments = () => {
     const [progress, setProgress] = useState({});
     const [uploadedFiles, setUploadedFiles] = useState([]);
 
+
     const handleFileUpload = async (selectedFiles) => {
         setFiles(selectedFiles);
         for (const file of selectedFiles) {
@@ -19,7 +20,7 @@ const UploadDocuments = () => {
         return new Promise((resolve, reject) => {
             const storageRef = ref(storage, `docs/${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
-
+    
             uploadTask.on(
                 "state_changed",
                 (snapshot) => {
@@ -34,11 +35,35 @@ const UploadDocuments = () => {
                 async () => {
                     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                     setUploadedFiles((prev) => [...prev, { name: file.name, url: downloadURL }]);
+                    
+                    // **Send file to FastAPI for OCR Processing**
+                    const extractedText = await sendToOCR(file);
+                    console.log("OCR Text:", extractedText);
+    
                     resolve();
                 }
             );
         });
+    };    
+
+    const sendToOCR = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+    
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/ocr/", {
+                method: "POST",
+                body: formData,
+            });
+    
+            const data = await response.json();
+            return data.extracted_text || "No text extracted.";
+        } catch (error) {
+            console.error("OCR Error:", error);
+            return "OCR failed.";
+        }
     };
+    
 
     const deleteFile = async (fileName) => {
         try {
