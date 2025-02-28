@@ -33,7 +33,7 @@ const MainApp = () => {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/' element={<Dashboard />} />
-        <Route path='/upload-doc' element={<UploadDocuments />} />
+        <Route path='/upload' element={<UploadDocuments />} />
         <Route path='/ai-search' element={<AISearch />} />
         <Route path='/view-docs' element={<AllDocuments />} />
       </Routes>

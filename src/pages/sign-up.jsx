@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
+import Loader from '@/components/custom-ui/loader';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { AuthContext } from '@/contexts/AuthContext';
 import { signUpValidation } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CircleUser, Eye, EyeOff, Loader, LockKeyhole, Mail } from 'lucide-react';
+import { CircleUser, Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';

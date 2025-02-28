@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
+import { Progress } from "./progress";
 
 const mainVariant = {
   initial: {
@@ -25,9 +26,7 @@ const secondaryVariant = {
   },
 };
 
-export const FileUpload = ({
-  onChange
-}) => {
+export const FileUpload = ({ onChange, progress }) => {
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
 
@@ -56,6 +55,7 @@ export const FileUpload = ({
         whileHover="animate"
         className="p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden">
         <input
+          multiple
           ref={fileInputRef}
           id="file-upload-handle"
           type="file"
@@ -101,20 +101,11 @@ export const FileUpload = ({
                     </motion.p>
                   </div>
 
-                  <div
-                    className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      layout
-                      className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 ">
-                      {file.type}
-                    </motion.p>
-
-                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} layout>
-                      modified{" "}
-                      {new Date(file.lastModified).toLocaleDateString()}
-                    </motion.p>
+                  <div className="flex gap-2 items-center justify-center w-full mt-5">
+                    <Progress className="w-[90%]"  value={progress} />
+                    <h5 className="w-[10%]">
+                      {progress}%
+                    </h5>
                   </div>
                 </motion.div>
               ))}
@@ -169,11 +160,10 @@ export function GridPattern() {
           return (
             (<div
               key={`${col}-${row}`}
-              className={`w-10 h-10 flex flex-shrink-0 rounded-[2px] ${
-                index % 2 === 0
+              className={`w-10 h-10 flex flex-shrink-0 rounded-[2px] ${index % 2 === 0
                   ? "bg-gray-50 dark:bg-neutral-950"
                   : "bg-gray-50 dark:bg-neutral-950 shadow-[0px_0px_1px_3px_rgba(255,255,255,1)_inset] dark:shadow-[0px_0px_1px_3px_rgba(0,0,0,1)_inset]"
-              }`} />)
+                }`} />)
           );
         }))}
     </div>)

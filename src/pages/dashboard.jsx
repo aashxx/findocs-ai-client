@@ -15,7 +15,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <main>
+    <main className='w-full h-screen bg-black'>
         Dashboard
     </main>
   )
