@@ -4,16 +4,17 @@ import { Input } from '@/components/ui/input';
 import { AuthContext } from '@/contexts/AuthContext';
 import { signUpValidation } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CircleUser, Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import { CircleUser, Eye, EyeOff, Loader, LockKeyhole, Mail } from 'lucide-react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
 
-    const { signUpWithCredentials } = useContext(AuthContext);
+    const { signUpWithCredentials, user, loading } = useContext(AuthContext);
 
     const [viewPassword, setViewPassword] = useState(false);
+    const navigate = useNavigate();
 
     const form = useForm({
         resolver: zodResolver(signUpValidation),
@@ -30,8 +31,15 @@ const Signup = () => {
         form.reset();
     }
 
+    useEffect(() => {
+        if(user) {
+            navigate('/');
+        }
+    }, []);
+
     return (
         <Form {...form}>
+            { loading && <Loader />}
             <main className='flex flex-col items-center justify-center h-screen w-full'>
                 <form onSubmit={form.handleSubmit(onSignup)} className='border px-20 py-10 rounded-lg shadow-md'>
                     <h2 className='text-3xl text-center'>Create Account</h2>

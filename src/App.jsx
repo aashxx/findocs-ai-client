@@ -32,7 +32,7 @@ const MainApp = () => {
       <Routes>
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/' element={<Dashboard />} />
         <Route path='/upload-doc' element={<UploadDocuments />} />
         <Route path='/ai-search' element={<AISearch />} />
         <Route path='/view-docs' element={<AllDocuments />} />

@@ -1,3 +1,4 @@
+import Loader from '@/components/custom-ui/loader';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -5,15 +6,16 @@ import { AuthContext } from '@/contexts/AuthContext';
 import { loginValidation } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-    const { userLogin } = useContext(AuthContext);
+    const { userLogin, user, loading } = useContext(AuthContext);
 
     const [viewPassword, setViewPassword] = useState(false);
+    const navigate = useNavigate();
 
     const form = useForm({
         resolver: zodResolver(loginValidation),
@@ -29,8 +31,15 @@ const Login = () => {
         form.reset();
     }
 
+    useEffect(() => {
+        if(user) {
+            navigate('/');
+        }
+    }, []);
+
     return (
         <Form {...form}>
+            { loading && <Loader />}
             <main className='flex flex-col items-center justify-center h-screen w-full'>
                 <form onSubmit={form.handleSubmit(onLogin)} className='border px-20 py-10 rounded-lg shadow-md'>
                     <h2 className='text-3xl text-center'>Login</h2>
