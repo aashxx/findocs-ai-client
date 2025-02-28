@@ -13,7 +13,10 @@ export const NavMain = ({ items }) => {
       <SidebarMenu>
         {
           items.map((item) => {
-            const isActive = location.pathname.startsWith(item.url);
+            const isActive = item.url === "/" 
+              ? location.pathname === "/"
+              : location.pathname.startsWith(item.url) && item.url !== "/";
+              
             return (
               <SidebarMenuItem key={item.url}>
                 <Link to={item.url}>
