@@ -7,11 +7,15 @@ import AllDocuments from './pages/all-documents';
 import { AppSidebar } from './components/custom-ui/sidebar/app-sidebar';
 import Login from './pages/login';
 import Signup from './pages/sign-up';
+import { Toaster } from 'sonner';
+import AuthState from './contexts/AuthContext';
 
 const App = () => {
   return (
     <Router>
-      <MainApp />
+      <AuthState>
+        <MainApp />
+      </AuthState>
     </Router>
   )
 }
@@ -33,6 +37,7 @@ const MainApp = () => {
         <Route path='/ai-search' element={<AISearch />} />
         <Route path='/view-docs' element={<AllDocuments />} />
       </Routes>
+      <Toaster/>
     </>
   )
 }

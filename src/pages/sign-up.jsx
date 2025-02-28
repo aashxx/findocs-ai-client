@@ -1,13 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { loginValidation, signUpValidation } from '@/lib/zod';
+import { AuthContext } from '@/contexts/AuthContext';
+import { signUpValidation } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleUser, Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
+
+    const { signUpWithCredentials } = useContext(AuthContext);
 
     const [viewPassword, setViewPassword] = useState(false);
 
@@ -20,8 +24,10 @@ const Signup = () => {
         }
     });
 
-    const onSignup = (values) => {
-        console.log(values);
+    const onSignup = (credentials) => {
+        const { fullName, email, password } = credentials;
+        signUpWithCredentials(fullName, email, password);
+        form.reset();
     }
 
     return (
@@ -97,6 +103,9 @@ const Signup = () => {
                     <Button type='submit' className='mt-8 w-full text-md font-semibold'>
                         Create Account
                     </Button>
+                    <h4 className='my-4 text-sm text-center'>
+                        Already have an account? <Link className='hover:underline' to={'/login'}>Login</Link>
+                    </h4>
                 </form>
             </main>
         </Form>

@@ -3,6 +3,7 @@ import { CloudUpload, Files, LayoutDashboard, ScanSearch, Settings } from "lucid
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "../../ui/sidebar";
 import { CustomSidebarTrigger } from "./sidebar-trigger";
 import { NavMain } from "./nav-main";
+import { NavUser } from "./nav-user";
 
 const data = {
   navMain: [
@@ -47,6 +48,7 @@ export function AppSidebar({ ...props }) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

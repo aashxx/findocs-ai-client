@@ -1,13 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { AuthContext } from '@/contexts/AuthContext';
 import { loginValidation } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
+
+    const { userLogin } = useContext(AuthContext);
 
     const [viewPassword, setViewPassword] = useState(false);
 
@@ -19,8 +23,10 @@ const Login = () => {
         }
     });
 
-    const onLogin = (values) => {
-        console.log(values);
+    const onLogin = (credentials) => {
+        const { email, password } = credentials;
+        userLogin(email, password);
+        form.reset();
     }
 
     return (
@@ -81,6 +87,9 @@ const Login = () => {
                         Login
                     </Button>
                 </form>
+                <h4 className='my-4 text-sm text-center'>
+                    Don't have an account? <Link className='hover:underline' to={'/signup'}>Create now</Link>
+                </h4>
             </main>
         </Form>
     )
