@@ -12,6 +12,7 @@ import AuthState from './contexts/AuthContext';
 import DocsState from './contexts/DocsContext';
 import UsersState from './contexts/UsersContext';
 import ManageUsers from './pages/manage-users';
+import Settings from './pages/settings';
 
 const App = () => {
   return (
@@ -44,6 +45,7 @@ const MainApp = () => {
         <Route path='/ai-search' element={<AISearch />} />
         <Route path='/view-docs' element={<AllDocuments />} />
         <Route path='/manage-users' element={<ManageUsers />} />
+        <Route path='/settings' element={<Settings />} />
       </Routes>
       <Toaster/>
     </>

@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useContext } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 export const NavUser = () => {
 
@@ -41,14 +42,12 @@ export const NavUser = () => {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <Bolt />
-                        Settings
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Bell />
-                        Notifications
-                    </DropdownMenuItem>
+                        <Link to={'/settings'}>
+                            <DropdownMenuItem>
+                            <Bolt />
+                            Settings
+                        </DropdownMenuItem>
+                        </Link>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={signOutUser}>

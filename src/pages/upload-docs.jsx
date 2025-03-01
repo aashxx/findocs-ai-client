@@ -28,7 +28,7 @@ const UploadDocuments = () => {
     useEffect(() => {
         if(!user) {
             navigate('/login')
-        } else if(user?.role !== "Accountant") {
+        } else if(user?.role === "Auditor") {
             navigate('/');
         }
     }, [user]);
