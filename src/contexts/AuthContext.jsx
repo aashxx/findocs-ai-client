@@ -53,7 +53,7 @@ const AuthState = ({ children }) => {
             setUser({ uid: editUser.uid, fullName, email, photo: editUser.photoURL, role: "User" });
 
             setLoading(false);
-            navigate('/dashboard');
+            navigate('/');
 
         } catch (error) {
             console.error(error);
@@ -79,7 +79,7 @@ const AuthState = ({ children }) => {
             }
 
             setLoading(false);
-            navigate('/dashboard');
+            navigate('/');
 
         } catch (error) {
             console.error(error);
