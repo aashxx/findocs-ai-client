@@ -71,6 +71,7 @@ const UploadDocuments = () => {
             const docRef = doc(collection(db, "documents"), file.name);
             await setDoc(docRef, {
                 name: file.name,
+                size: (file.size / (1024 * 1024)).toFixed(2),
                 type: data.document_type,
                 extracted_text: data.extracted_text,
                 tags: data.tags,

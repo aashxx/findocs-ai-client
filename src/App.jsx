@@ -10,14 +10,17 @@ import Signup from './pages/sign-up';
 import { Toaster } from 'sonner';
 import AuthState from './contexts/AuthContext';
 import DocsState from './contexts/DocsContext';
+import UsersState from './contexts/UsersContext';
 
 const App = () => {
   return (
     <Router>
       <AuthState>
-        <DocsState>
-          <MainApp />
-        </DocsState>
+        <UsersState>
+          <DocsState>
+            <MainApp />
+          </DocsState>
+        </UsersState>
       </AuthState>
     </Router>
   )
