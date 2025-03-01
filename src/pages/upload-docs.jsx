@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Upload } from "lucide-react";
 import { storage } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "@/contexts/AuthContext";
 
 const UploadDocuments = () => {
+
+    const { user } = useContext(AuthContext);
+
     const [files, setFiles] = useState([]);
     const [progress, setProgress] = useState({});
     const [fileDetails, setFileDetails] = useState({});
@@ -18,6 +22,16 @@ const UploadDocuments = () => {
         "Uploading tags...", 
         "Finishing..."
     ];
+
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if(!user) {
+            navigate('/login')
+        } else if(user?.role !== "Accountant") {
+            navigate('/');
+        }
+    }, [user]);
 
     const handleFileUpload = async (selectedFiles) => {
         setFiles(selectedFiles);

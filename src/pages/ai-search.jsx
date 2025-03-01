@@ -1,17 +1,30 @@
 import DocumentCard from "@/components/custom-ui/ai-search/doc-card";
-import Loader from "@/components/custom-ui/loader";
 import { FileUpload } from "@/components/ui/file-upload";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AuthContext } from "@/contexts/AuthContext";
 import { PLACEHOLDERS } from "@/lib/constants";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AISearch = () => {
+
+    const { user } = useContext(AuthContext);
 
     const [query, setQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!user) {
+            navigate('/login')
+        } else if(user?.role === "Accountant") {
+            navigate('/');
+        }
+    }, [user]);
 
     const handleSearch = async () => {
         if (!query.trim()) return;

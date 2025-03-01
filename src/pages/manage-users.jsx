@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ChevronDown, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -6,14 +6,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { UsersContext } from '@/contexts/UsersContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { db } from '@/lib/firebase';
 import { updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { toast } from 'sonner';
+import { AuthContext } from '@/contexts/AuthContext';
 
 const ManageUsers = () => {
 
     const { users } = useContext(UsersContext);
+    const { user } = useContext(AuthContext);
+
+    const navigate = useNavigate();
+    
+        useEffect(() => {
+            if(!user) {
+                navigate('/login')
+            } else if(user?.role !== "Admin") {
+                navigate('/');
+            }
+        }, [user]);
 
     const handleRoleChange = async (email, newRole) => {
         try {

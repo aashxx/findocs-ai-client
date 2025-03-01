@@ -46,7 +46,7 @@ const AuthState = ({ children }) => {
                 fullName,
                 email,
                 photo: editUser.photoURL,
-                role: "User",
+                role: "Accountant",
                 createdAt: serverTimestamp()
             });
 
