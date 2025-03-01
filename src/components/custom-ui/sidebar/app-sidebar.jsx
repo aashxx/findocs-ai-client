@@ -1,5 +1,5 @@
 import React from "react";
-import { CloudUpload, Files, LayoutDashboard, ScanSearch, Settings } from "lucide-react";
+import { CloudUpload, Files, LayoutDashboard, ScanSearch, Settings, Users } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "../../ui/sidebar";
 import { CustomSidebarTrigger } from "./sidebar-trigger";
 import { NavMain } from "./nav-main";
@@ -29,6 +29,11 @@ const data = {
       title: "Documents",
       url: "/view-docs",
       icon: Files,
+    },
+    {
+      title: "Manage Users",
+      url: "/manage-users",
+      icon: Users,
     },
     {
       title: "Settings",

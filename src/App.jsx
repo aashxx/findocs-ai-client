@@ -11,6 +11,7 @@ import { Toaster } from 'sonner';
 import AuthState from './contexts/AuthContext';
 import DocsState from './contexts/DocsContext';
 import UsersState from './contexts/UsersContext';
+import ManageUsers from './pages/manage-users';
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const MainApp = () => {
         <Route path='/upload' element={<UploadDocuments />} />
         <Route path='/ai-search' element={<AISearch />} />
         <Route path='/view-docs' element={<AllDocuments />} />
+        <Route path='/manage-users' element={<ManageUsers />} />
       </Routes>
       <Toaster/>
     </>
