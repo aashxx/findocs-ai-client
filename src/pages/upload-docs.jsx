@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
-import { collection, doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
-import { Upload, X } from "lucide-react";
-import { storage } from "@/lib/firebase"; // Firebase Storage
-import { db } from "@/lib/firebase"; // Firestore DB
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { Upload } from "lucide-react";
+import { storage } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 const UploadDocuments = () => {
     const [files, setFiles] = useState([]);
     const [progress, setProgress] = useState({});
-    const [uploadedFiles, setUploadedFiles] = useState([]);
     const [fileDetails, setFileDetails] = useState({});
+    const [uploading, setUploading] = useState(false);
+    const statusMessages = [
+        "Extracting text...", 
+        "Classifying document...", 
+        "Uploading tags...", 
+        "Finishing..."
+    ];
 
     const handleFileUpload = async (selectedFiles) => {
         setFiles(selectedFiles);
+        setUploading(true);
         for (const file of selectedFiles) {
             await uploadFile(file);
         }
+        setUploading(false);
     };
 
     const uploadFile = (file) => {
@@ -36,14 +46,11 @@ const UploadDocuments = () => {
                 },
                 async () => {
                     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    setUploadedFiles((prev) => [...prev, { name: file.name, url: downloadURL }]);
-
-                    // ✅ Send file to backend for processing
                     const response = await processFile(file, downloadURL);
                     if (response) {
                         setFileDetails((prev) => ({ ...prev, [file.name]: response }));
                     }
-
+                    setProgress((prev) => ({ ...prev, [file.name]: "Uploaded" }));
                     resolve();
                 }
             );
@@ -59,18 +66,15 @@ const UploadDocuments = () => {
                 method: "POST",
                 body: formData,
             });
-
             const data = await response.json();
-            console.log("Processed Data:", data);
 
-            // ✅ Store OCR, metadata, and embeddings in Firestore
             const docRef = doc(collection(db, "documents"), file.name);
             await setDoc(docRef, {
                 name: file.name,
                 type: data.document_type,
                 extracted_text: data.extracted_text,
                 tags: data.tags,
-                embeddings: data.embeddings,  // ✅ Storing embeddings
+                embeddings: data.embeddings,
                 file_url: downloadURL,
                 uploaded_at: serverTimestamp(),
             });
@@ -79,7 +83,7 @@ const UploadDocuments = () => {
                 name: file.name,
                 type: data.document_type,
                 tags: data.tags,
-                embeddings: data.embeddings,  // ✅ Pass embeddings
+                embeddings: data.embeddings,
             };
         } catch (error) {
             console.error("Processing Error:", error);
@@ -87,94 +91,56 @@ const UploadDocuments = () => {
         }
     };
 
-    const deleteFile = async (fileName) => {
-        try {
-            const fileRef = ref(storage, `docs/${fileName}`);
-            await deleteObject(fileRef);
-            setUploadedFiles((prev) => prev.filter((file) => file.name !== fileName));
-            setFileDetails((prev) => {
-                const newDetails = { ...prev };
-                delete newDetails[fileName];
-                return newDetails;
-            });
-
-            // ✅ Delete document from Firestore
-            await deleteDoc(doc(db, "documents", fileName));
-
-            alert("File deleted successfully!");
-        } catch (error) {
-            console.error("Error deleting file:", error);
-            alert("Failed to delete file.");
-        }
-    };
-
     return (
-        <main className="w-full min-h-screen bg-gray-100 p-10">
+        <main className="w-full min-h-screen bg-gray-50 p-10 flex flex-col items-center">
             <section className="mb-6">
-                <h2 className="font-semibold text-2xl text-gray-800">Upload Documents</h2>
+                <h2 className="font-semibold text-3xl text-gray-800">Upload Your Documents</h2>
+                <p className="text-gray-500 mt-2">Securely upload and process your documents</p>
             </section>
-
-            <section className="w-full mx-auto p-6 bg-white rounded-lg flex flex-col items-center justify-center border border-dashed border-gray-300 hover:bg-gray-50 transition">
-                <label className="cursor-pointer flex flex-col items-center">
-                    <Upload className="w-14 h-14 text-gray-400 mb-3" />
+            
+            <section className={cn("w-full max-w-xl p-6 bg-white rounded-xl shadow-lg border flex flex-col items-center justify-center transition-all", uploading && "opacity-50 cursor-not-allowed") }>
+                <label className="cursor-pointer flex flex-col items-center w-full">
+                    <Upload className="w-16 h-16 text-gray-400 mb-3" />
                     <span className="text-lg font-medium">Drag & Drop or Click to Upload</span>
                     <input
                         type="file"
                         className="hidden"
                         multiple
                         onChange={(e) => handleFileUpload(Array.from(e.target.files))}
+                        disabled={uploading}
                     />
                 </label>
             </section>
-
+            
             {Object.keys(progress).length > 0 && (
-                <div className="mt-4">
+                <div className="mt-10 w-full max-w-xl text-center">
                     {files.map((file) => (
-                        <div key={file.name} className="mb-2">
-                            <span className="text-sm text-gray-700">{file.name}</span>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                    className="bg-blue-600 h-2 rounded-full"
-                                    style={{ width: `${progress[file.name] || 0}%` }}
-                                ></div>
-                            </div>
+                        <div key={file.name} className="mb-4">
+                            <aside className="flex items-center justify-between">
+                                <p className={`text-sm font-medium text-gray-700 ${progress[file.name] !== "Uploaded" && 'text-center'}`}>{file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)</p>
+                                {progress[file.name] === "Uploaded" && (
+                                    <p className="text-green-600 font-semibold text-sm bg-green-100 px-2 py-1 rounded-md">Uploaded</p>
+                                )}
+                            </aside>
+                            {progress[file.name] !== "Uploaded" && (
+                                <>
+                                    <aside className="flex gap-2 items-center justify-center">  
+                                        <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
+                                            <div
+                                                className="bg-blue-600 h-3 rounded-full transition-all duration-200"
+                                                style={{ width: `${progress[file.name] || 0}%` }}
+                                            />
+                                        </div>
+                                    </aside>
+                                    <p className="text-xs text-gray-700">{progress[file.name] || 0}%</p>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        {statusMessages[Math.min(Math.floor((progress[file.name] / 100) * statusMessages.length), statusMessages.length - 1)]}
+                                    </p>
+                                </>
+                            )}
                         </div>
                     ))}
                 </div>
-            )}
-
-            {uploadedFiles.length > 0 && (
-                <section className="mt-6">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-3">Uploaded Files</h3>
-                    <ul className="space-y-2">
-                        {uploadedFiles.map((file, index) => (
-                            <li key={index} className="p-3 bg-gray-50 border rounded-md">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-gray-700">{file.name}</span>
-                                    <div className="flex space-x-2">
-                                        <a href={file.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                                            View
-                                        </a>
-                                        <button className="text-red-500 hover:text-red-700" onClick={() => deleteFile(file.name)}>
-                                            <X className="w-5 h-5" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {fileDetails[file.name] && (
-                                    <div className="mt-2 p-2 bg-gray-100 rounded-md">
-                                        <p className="text-sm text-gray-700">
-                                            <strong>Type:</strong> {fileDetails[file.name].type}
-                                        </p>
-                                        <p className="text-sm text-gray-700">
-                                            <strong>Tags:</strong> {JSON.stringify(fileDetails[file.name].tags)}
-                                        </p>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
             )}
         </main>
     );

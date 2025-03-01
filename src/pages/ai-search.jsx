@@ -1,6 +1,13 @@
+import DocumentCard from "@/components/custom-ui/ai-search/doc-card";
+import Loader from "@/components/custom-ui/loader";
+import { FileUpload } from "@/components/ui/file-upload";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PLACEHOLDERS } from "@/lib/constants";
 import React, { useState } from "react";
 
 const AISearch = () => {
+
     const [query, setQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -30,63 +37,50 @@ const AISearch = () => {
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">🔍 AI Document Search</h2>
+        <main className="w-full p-6 bg-white rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold my-7 text-center">FinDocs AI Search</h2>
 
             {/* Search Input */}
-            <div className="flex space-x-2">
-                <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
-                    placeholder="Search documents..."
-                    value={query}
+                <PlaceholdersAndVanishInput 
+                    placeholders={PLACEHOLDERS}
                     onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Pressing Enter triggers search
-                    autoFocus // Automatically focuses input field
+                    value={query}
+                    onSubmit={handleSearch}
                 />
-                <button 
-                    onClick={handleSearch}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                    disabled={loading}
-                >
-                    {loading ? <span className="animate-spin">🔄</span> : "Search"}
-                </button>
-            </div>
+
+            {
+                loading || searchResults.length > 0 && (
+                    <h2 className="mt-10 text-center font-semibold text-lg">
+                        Relevant Docs
+                    </h2>
+                )
+            }
+
+            { loading && (
+                <section className="flex gap-2 justify-center my-10">
+                    <Skeleton className={'h-[200px] w-[300px] rounded-lg'} />
+                    <Skeleton className={'h-[200px] w-[300px] rounded-lg'} />
+                    <Skeleton className={'h-[200px] w-[300px] rounded-lg'} />
+                </section>
+            )}
 
             {/* Error Message */}
             {error && <p className="text-red-600 mt-2">{error}</p>}
 
             {/* Display Search Results */}
-            {searchResults.length > 0 ? (
-                <div className="mt-6">
-                    <h3 className="text-lg font-semibold">📄 Results:</h3>
-                    <ul className="mt-2 space-y-2">
-                        {searchResults.map((doc, index) => (
-                            <li key={index} className="p-3 bg-gray-100 border rounded-md">
-                                <p><strong>📄 Document:</strong> {doc.text}</p>
-                                <p><strong>📌 Type:</strong> {doc.type || "Unknown"}</p>
-                                <p><strong>🏷 Tags:</strong> {JSON.stringify(doc.tags || {})}</p>
-                                <p><strong>🔍 Relevance:</strong> {doc.similarity ? doc.similarity.toFixed(2) : "N/A"}</p>
-                                {doc.file_url && (
-                                    <a 
-                                        href={doc.file_url} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="text-blue-500 hover:underline"
-                                    >
-                                        View Document
-                                    </a>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ) : (
-                !loading && !error && (
-                    <p className="text-gray-500 mt-4">No results found. Try a different search term.</p>
-                )
-            )}
-        </div>
+            <section className="w-[95%] flex flex-wrap gap-2 my-10 justify-center">
+                {
+                    searchResults.length > 0 && searchResults.map((doc, idx) => (
+                        <DocumentCard key={idx} doc={doc} allDocs={false} />
+                    ))
+                }
+                {
+                    searchResults.length === 0 && !loading && (
+                        <FileUpload />
+                    )
+                }
+            </section>
+        </main>
     );
 };
 

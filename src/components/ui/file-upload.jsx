@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
 import { Progress } from "./progress";
+import { Link } from "react-router-dom";
 
 const mainVariant = {
   initial: {
@@ -51,16 +52,11 @@ export const FileUpload = ({ onChange, progress }) => {
   return (
     (<div className="w-full" {...getRootProps()}>
       <motion.div
+        href="/upload"
         onClick={handleClick}
         whileHover="animate"
         className="p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden">
-        <input
-          multiple
-          ref={fileInputRef}
-          id="file-upload-handle"
-          type="file"
-          onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
-          className="hidden" />
+          <Link className="hidden" to={'/upload'} ref={fileInputRef}></Link>
         <div
           className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]">
           <GridPattern />
@@ -68,11 +64,11 @@ export const FileUpload = ({ onChange, progress }) => {
         <div className="flex flex-col items-center justify-center">
           <p
             className="relative z-20 font-sans font-bold text-neutral-700 dark:text-neutral-300 text-base">
-            Upload file
+            Upload files
           </p>
           <p
             className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2">
-            Drag or drop your files here or click to upload
+            No files? Click here to upload
           </p>
           <div className="relative w-full mt-10 max-w-xl mx-auto">
             {files.length > 0 &&

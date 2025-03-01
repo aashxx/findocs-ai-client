@@ -27,7 +27,7 @@ const data = {
     },
     {
       title: "Documents",
-      url: "/documents",
+      url: "/view-docs",
       icon: Files,
     },
     {
