@@ -51,7 +51,7 @@ const AISearch = () => {
 
     return (
         <main className="w-full p-6rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold my-7 text-center">FinDocs AI Search</h2>
+            <h2 className="text-xl font-semibold my-7 text-center">FinDocx AI Search</h2>
 
             {/* Search Input */}
                 <PlaceholdersAndVanishInput 

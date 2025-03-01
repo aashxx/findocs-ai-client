@@ -11,7 +11,7 @@ export function CustomSidebarTrigger() {
                 <SidebarMenuButton size={'lg'} className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground my-5">
                     <div className="flex items-center justify-center gap-2">
                         <FileSearch />
-                        <span className="text-lg text-center">FinDocs AI</span>
+                        <span className="text-lg text-center">FinDocx AI</span>
                     </div>
                 </SidebarMenuButton>
             </SidebarMenuItem>
