@@ -15,10 +15,10 @@ const DocumentCard = ({ doc, allDocs }) => {
     return (
         <a target='blank' href={doc.file_url}>
             <article className="max-w-[300px] w-[300px] rounded-lg h-[200px] border shadowmd hover:shadow-lg hover:cursor-pointer transition-all duration-300 ease-in">
-                <div className='h-[65%] rounded-t-lg flex items-center justify-center'>
+                <div className='h-[65%] rounded-t-lg flex items-center bg-[whitesmoke] justify-center'>
                     <FileText className='text-[gray] h-[50px] w-[50px]' />
                 </div>
-                <aside className='bg-[whitesmoke] h-[35%] rounded-b-lg py-2 px-3 relative'>
+                <aside className='h-[35%] rounded-b-lg py-2 px-3 relative'>
                     <h2 className='text-ellipsis overflow-hidden whitespace-nowrap'>
                         {doc.name}
                     </h2>

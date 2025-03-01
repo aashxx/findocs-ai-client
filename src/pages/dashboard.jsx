@@ -17,9 +17,9 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  const totalStorageUsed = docs.reduce((acc, doc) => acc + (doc.size || 0), 0); 
-  const totalStorageUsedMB = (totalStorageUsed / (1024 * 1024)).toFixed(1); 
-
+  const totalStorageUsed = docs.reduce((acc, doc) => acc + parseFloat(doc.size || "0"), 0);
+  const totalStorageUsedMB = (totalStorageUsed * 1024).toFixed(0); 
+  
   const cardData = [
     {
       card_name: "Total Documents",
@@ -55,7 +55,7 @@ const Dashboard = () => {
 
 
   return (
-    <main className='w-full min-h-screen bg-gray-100 p-10'>
+    <main className='w-full min-h-screen p-10'>
       <section className="mb-6 flex items-center justify-between">
         <h2 className="font-semibold text-2xl text-gray-800">Dashboard</h2>
         <h2>

@@ -19,8 +19,8 @@ const Settings = () => {
 
     const [selectedFileTypes, setSelectedFileTypes] = useState([]);
 
-    const totalStorageUsed = docs.reduce((acc, doc) => acc + (doc.size || 0), 0); 
-    const totalStorageUsedMB = (totalStorageUsed / (1024 * 1024)).toFixed(1); 
+    const totalStorageUsed = docs.reduce((acc, doc) => acc + parseFloat(doc.size || "0"), 0);
+    const totalStorageUsedMB = (totalStorageUsed * 1024).toFixed(2); // Convert GB to MB
 
     // File types options
     const fileTypeOptions = [
@@ -37,7 +37,7 @@ const Settings = () => {
     const storagePercentage = (usedStorage / totalStorage) * 100; // Calculate percentage
 
     return (
-        <main className="w-full min-h-screen bg-gray-100 p-10">
+        <main className="w-full min-h-screen p-10">
         {/* Header Section */}
         <section className="mb-6 flex items-center justify-between">
             <h2 className="font-semibold text-2xl text-gray-800">Settings</h2>

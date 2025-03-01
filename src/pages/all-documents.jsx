@@ -58,7 +58,7 @@ const AllDocuments = () => {
 
           {/* Show all docs matching the search query */}
           <TabsContent value={"All"}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+            <div className="mt-10 flex gap-3 flex-wrap">
               {filteredDocs.length > 0 ? (
                 filteredDocs.map((doc, idx) => (
                   <DocumentCard key={idx} doc={doc} allDocs={true} />
@@ -72,7 +72,7 @@ const AllDocuments = () => {
           {/* Tabs based on document type */}
           {types.map((type, idx) => (
             <TabsContent key={idx} value={type}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+              <div className="flex gap-3 flex-wrap mt-10">
                 {filteredDocs.filter(doc => doc.type === type).length > 0 ? (
                   filteredDocs.filter(doc => doc.type === type).map((doc, idx) => (
                     <DocumentCard key={idx} doc={doc} allDocs={true} />

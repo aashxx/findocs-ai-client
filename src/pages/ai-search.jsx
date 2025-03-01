@@ -50,7 +50,7 @@ const AISearch = () => {
     };
 
     return (
-        <main className="w-full p-6 bg-white rounded-lg shadow-md">
+        <main className="w-full p-6rounded-lg shadow-md">
             <h2 className="text-xl font-semibold my-7 text-center">FinDocs AI Search</h2>
 
             {/* Search Input */}

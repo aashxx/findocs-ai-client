@@ -53,7 +53,7 @@ const ManageUsers = () => {
     ];
 
     return (
-        <main className="w-full min-h-screen bg-gray-100 p-10">
+        <main className="w-full min-h-screen p-10">
 
             {/* Page Header */}
             <section className="mb-6 flex items-center justify-between">

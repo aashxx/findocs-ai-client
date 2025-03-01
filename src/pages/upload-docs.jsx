@@ -107,7 +107,7 @@ const UploadDocuments = () => {
     };
 
     return (
-        <main className="w-full min-h-screen bg-gray-50 p-10 flex flex-col items-center">
+        <main className="w-full min-h-screen p-10 flex flex-col items-center">
             <section className="mb-6">
                 <h2 className="font-semibold text-3xl text-gray-800">Upload Your Documents</h2>
                 <p className="text-gray-500 mt-2">Securely upload and process your documents</p>
@@ -142,7 +142,7 @@ const UploadDocuments = () => {
                                     <aside className="flex gap-2 items-center justify-center">  
                                         <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
                                             <div
-                                                className="bg-blue-600 h-3 rounded-full transition-all duration-200"
+                                                className="bg-black h-3 rounded-full transition-all duration-200"
                                                 style={{ width: `${progress[file.name] || 0}%` }}
                                             />
                                         </div>
