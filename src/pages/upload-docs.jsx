@@ -7,9 +7,9 @@ import { db } from "@/lib/firebase";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const UploadDocuments = () => {
-
     const { user } = useContext(AuthContext);
 
     const [files, setFiles] = useState([]);
@@ -26,9 +26,9 @@ const UploadDocuments = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        if(!user) {
-            navigate('/login')
-        } else if(user?.role === "Auditor") {
+        if (!user) {
+            navigate('/login');
+        } else if (user?.role === "Auditor") {
             navigate('/');
         }
     }, [user]);
@@ -55,7 +55,7 @@ const UploadDocuments = () => {
                 },
                 (error) => {
                     console.error("Upload Error:", error);
-                    alert("Upload failed!");
+                    toast("Upload failed!");
                     reject(error);
                 },
                 async () => {
@@ -87,12 +87,20 @@ const UploadDocuments = () => {
                 name: file.name,
                 size: (file.size / (1024 * 1024)).toFixed(2),
                 type: data.document_type,
-                extracted_text: data.extracted_text,
+                extracted_text: data.extracted_text || "",  // ✅ Ensure text is never undefined
                 tags: data.tags,
                 embeddings: data.embeddings,
+                fraud_alerts: data.fraud_alerts || [],  // ✅ Store fraud alerts
                 file_url: downloadURL,
                 uploaded_at: serverTimestamp(),
             });
+
+            // ✅ Trigger Sonner Toasts for Fraud Alerts
+            if (data.fraud_alerts?.length > 0) {
+                data.fraud_alerts.forEach(alert => {
+                    toast(`🚨 Fraud Alert: ${alert}`);
+                });
+            }
 
             return {
                 name: file.name,
@@ -102,6 +110,7 @@ const UploadDocuments = () => {
             };
         } catch (error) {
             console.error("Processing Error:", error);
+            toast.error("❌ File processing failed.");
             return null;
         }
     };
@@ -113,7 +122,7 @@ const UploadDocuments = () => {
                 <p className="text-gray-500 mt-2">Securely upload and process your documents</p>
             </section>
             
-            <section className={cn("w-full max-w-xl p-6 bg-white rounded-xl shadow-lg border flex flex-col items-center justify-center transition-all", uploading && "opacity-50 cursor-not-allowed") }>
+            <section className={cn("w-full max-w-xl p-6 bg-white rounded-xl shadow-lg border flex flex-col items-center justify-center transition-all", uploading && "opacity-50 cursor-not-allowed")}>
                 <label className="cursor-pointer flex flex-col items-center w-full">
                     <Upload className="w-16 h-16 text-gray-400 mb-3" />
                     <span className="text-lg font-medium">Drag & Drop or Click to Upload</span>

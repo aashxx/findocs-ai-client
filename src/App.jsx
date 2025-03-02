@@ -13,6 +13,7 @@ import DocsState from './contexts/DocsContext';
 import UsersState from './contexts/UsersContext';
 import ManageUsers from './pages/manage-users';
 import Settings from './pages/settings';
+import Alerts from './pages/alerts';
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const MainApp = () => {
         <Route path='/view-docs' element={<AllDocuments />} />
         <Route path='/manage-users' element={<ManageUsers />} />
         <Route path='/settings' element={<Settings />} />
+        <Route path='/alerts' element={<Alerts />} />
       </Routes>
       <Toaster/>
     </>

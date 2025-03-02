@@ -1,4 +1,4 @@
-import { Bell, Bolt, ChevronRight, LogOut } from "lucide-react";
+import { AlertCircle, Bolt, ChevronRight, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -46,6 +46,12 @@ export const NavUser = () => {
                             <DropdownMenuItem>
                             <Bolt />
                             Settings
+                        </DropdownMenuItem>
+                        </Link>
+                        <Link to={'/alerts'}>
+                            <DropdownMenuItem>
+                            <AlertCircle />
+                            Alerts
                         </DropdownMenuItem>
                         </Link>
                     </DropdownMenuGroup>
