@@ -15,6 +15,8 @@ const Dashboard = () => {
   const { docs } = useContext(DocsContext);
   const { users } = useContext(UsersContext);
 
+  const fraudDocs = docs.filter(doc => doc.fraud_alerts && doc.fraud_alerts.length > 0);
+
   const navigate = useNavigate();
 
   const totalStorageUsed = docs.reduce((acc, doc) => acc + parseFloat(doc.size || "0"), 0);
@@ -36,7 +38,7 @@ const Dashboard = () => {
     {
       card_name: "Fraud Alerts",
       sub_line: "issues detected",
-      metric: "7",
+      metric: fraudDocs.length,
       icon: CircleAlert
     },
     {
